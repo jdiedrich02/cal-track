@@ -1,0 +1,299 @@
+.dashboard-container {
+  padding: 1.5rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+
+  h1 {
+    margin: 0;
+  }
+}
+
+.header-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.card-content {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.card-icon {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 1.3rem;
+
+  &.eaten {
+    background: #fef3c7;
+    color: #d97706;
+  }
+  
+  &.left {
+    background: #dbeafe;
+    color: #2563eb;
+  }
+  
+  &.over {
+    background: #fee2e2;
+    color: #dc2626;
+  }
+  
+  &.goal {
+    background: #d1fae5;
+    color: #059669;
+  }
+  
+  &.protein {
+    background: #e0e7ff;
+    color: #4f46e5;
+  }
+}
+
+.card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.card-label {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.card-unit {
+  font-size: 0.75rem;
+  color: #aaa;
+}
+
+.value {
+  font-size: 1.8rem;
+  font-weight: 700;
+  line-height: 1.1;
+  color: #1f2937;
+
+  &.negative {
+    color: #ef4444;
+  }
+}
+
+.empty-meal {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 1.5rem 0;
+    color: #ccc;
+    font-size: 0.875rem;
+
+    i {
+      font-size: 1.6rem;
+    }
+}
+
+:host ::ng-deep .meal-table {
+  .p-datatable-tbody > tr > td {
+    padding: 0.5rem 0.6rem;
+    border: none;
+    border-bottom: 1px solid #f3f4f6;
+    vertical-align: middle;
+  }
+
+  .p-datatable-tfoot > tr > td {
+    padding: 0.5rem 0.6rem;
+    border: none;
+    background: transparent;
+  }
+}
+
+.col-name {
+  width: 40%;
+  font-weight: 500;
+}
+
+.col-cal {
+  width: 25%;
+}
+
+.col-macro {
+  width: 14%;
+  font-size: 0.85rem;
+  color: #4b5563;
+  white-space: nowrap;
+}
+
+.col-action {
+  width: 7%;
+  text-align: right;
+}
+
+.macro-label {
+  font-size: 0.7rem;
+  color: #9ca3af;
+  text-transform: uppercase;
+  margin-left: 1px;
+}
+
+.meal-sections {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+
+@media (max-width: 768px) {
+  .meal-sections {
+    grid-template-columns: 1fr;
+  }
+
+  .cards {
+    grid-template-columns: 1fr;
+  }
+}
+
+// Day Summary dialog styles
+.status-banner {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  font-weight: 500;
+  margin-bottom: 1.25rem;
+
+  &.over {
+    background: #fef2f2;
+    color: #b91c1c;
+  }
+
+  &.under {
+    background: #f0fdf4;
+    color: #166534;
+  }
+
+  i {
+    font-size: 1.1rem;
+  }
+}
+
+.summary-section {
+  margin-bottom: 0.5rem;
+}
+
+.summary-section-title {
+  margin: 0 0 0.75rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #666;
+}
+
+.stat-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.4rem 0;
+
+  .stat-label {
+    color: #555;
+    font-size: 0.9rem;
+  }
+
+  .stat-value {
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+}
+
+.text-red {
+  color: #dc2626;
+}
+
+.text-green {
+  color: #16a34a;
+}
+
+.progress-track {
+  height: 10px;
+  background: #e5e7eb;
+  border-radius: 999px;
+  overflow: hidden;
+  margin: 0.9rem 0 0.3rem;
+}
+
+.progress-fill {
+  height: 100%;
+  background: #22c55e;
+  border-radius: 999px;
+  transition: width 0.4s ease;
+
+  &.over {
+    background: #ef4444;
+  }
+
+  &.protein {
+    background: #4f46e5;
+
+    &.over {
+      background: #16a34a;
+    }
+  }
+}
+
+.progress-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: #9ca3af;
+}
+
+.empty-macros {
+  text-align: center;
+  color: #aaa;
+  font-style: italic;
+  padding: 1rem 0;
+}
+
+// History dialog styles
+.history-loading,
+.history-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 2rem 0;
+  color: #aaa;
+  font-size: 0.9rem;
+
+  i {
+    font-size: 1.8rem;
+  }
+}
+
+.col-date {
+  font-weight: 500;
+  white-space: nowrap;
+}

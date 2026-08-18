@@ -1,0 +1,75 @@
+.form-body {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 0.5rem 0;
+}
+
+.meal-type-selector {
+  display: flex;
+  justify-content: center;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+
+  label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #444;
+  }
+
+  .required {
+    color: #ef4444;
+  }
+}
+
+.field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.full-width {
+  width: 100%;
+}
+
+:host ::ng-deep .full-width.p-select {
+  width: 100%;
+}
+
+:host ::ng-deep .full-width.p-inputnumber {
+  width: 100%;
+}
+
+.no-macros-hint {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.6rem 0.75rem;
+  border-radius: 6px;
+  background: #fef9c3;
+  color: #92400e;
+  font-size: 0.875rem;
+
+  a {
+    color: #2563eb;
+    font-weight: 500;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+}
+
+.preview {
+  display: flex;
+  gap: 1.25rem;
+  padding: 0.6rem 0.9rem;
+  border-radius: 6px;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  font-size: 0.875rem;
+  color: #166534;
+  flex-wrap: wrap;
+}

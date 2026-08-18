@@ -1,0 +1,43 @@
+<p-dialog header="Add Meal Entry" [(visible)]="visible" [modal]="true" [draggable]="false" [resizable]="false" [style]="{ width: '650px', height: '650px' }">
+  <div class="form-body">
+    <div class="meal-type-selector">
+      <p-selectButton [options]="mealTypeOptions" [(ngModel)]="entry.mealType" optionLabel="label" optionValue="value" />
+    </div>
+    <div class="field">
+      <label>Food <span class="required"></span></label>
+      <ng-container *ngIf="macros.length > 0; else noMacros">
+        <p-select [options]="macros" [(ngModel)]="entry.macroId" optionLabel="name" optionValue="id" placeholder="Select a food..."
+          [filter]="true" filterBy="name" styleClass="full-width" />
+      </ng-container>
+      <ng-template #noMacros>
+        <div class="no-macros-hint">
+          <i class="pi pi-info-circle"></i>
+          No macros saved yet.
+          <a routerLink="/macros" (click)="close()">Add macros here</a>
+        </div>
+      </ng-template>
+    </div>
+    <div class="field" *ngIf="selectedMacro && selectedMacro.unit !== 'quantity'">
+      <label for="grams">Grams Eaten <span class="required"></span></label>
+      <p-inputNumber inputId="grams" [(ngModel)]="entry.grams" [min]="1" suffix=" g" styleClass="full-width" />
+    </div>
+    <div class="preview" *ngIf="selectedMacro && (selectedMacro.unit === 'quantity' || entry.grams > 0)">
+      <span>Estimated Macros:</span>
+      <ng-container *ngIf="selectedMacro.unit === 'quantity'">
+        <span><strong>{{ selectedMacro.calories }}</strong> cal</span>
+        <span *ngIf="selectedMacro.protein != null"><strong>{{ selectedMacro.protein }}g</strong> protein</span>
+        <span *ngIf="selectedMacro.carbs != null"><strong>{{ selectedMacro.carbs }}g</strong> carbs</span>
+      </ng-container>
+      <ng-container *ngIf="selectedMacro.unit !== 'quantity'">
+        <span><strong>~{{ (selectedMacro.calories * entry.grams / selectedMacro.grams) | number:'1.0-0' }}</strong> cal</span>
+        <span *ngIf="selectedMacro.protein != null"><strong>{{ (selectedMacro.protein * entry.grams / selectedMacro.grams) | number:'1.0-0' }}g</strong> protein</span>
+        <span *ngIf="selectedMacro.carbs != null"><strong>{{ (selectedMacro.carbs * entry.grams / selectedMacro.grams) | number:'1.0-0' }}g</strong> carbs</span>
+      </ng-container>
+    </div>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <p-button label="Cancel" severity="secondary" [text]="true" (onClick)="close()" />
+    <p-button label="Add Entry" icon="pi pi-plus" (onClick)="save()" [loading]="loading" [disabled]="macros.length === 0" />
+  </ng-template>
+</p-dialog>

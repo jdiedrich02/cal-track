@@ -1,0 +1,22 @@
+<div class="auth-container">
+  <p-card class="auth-card">
+    <div class="auth-header">
+      <h2>Welcome!</h2>
+      <p>Sign in to continue</p>
+    </div>
+    <div class="auth-divider"></div>
+    <div class="form-group">
+      <label>Username</label>
+      <input [(ngModel)]="username" pInputText type="text" placeholder="Enter your username"/>
+    </div>
+    <div class="form-group">
+      <label>Password</label>
+      <p-password [(ngModel)]="password" [style]="{'width':'100%'}" [inputStyle]="{'width':'100%'}" [feedback]="false" placeholder="Enter your password"></p-password>
+    </div>
+    <button pButton label="Login" class="auth-button" (click)="login()"></button>
+    <div class="auth-footer">
+      <span>Don’t have an account?</span>
+      <a routerLink="/signup">Sign up</a>
+    </div>
+  </p-card> 
+</div>

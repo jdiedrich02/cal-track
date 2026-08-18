@@ -1,0 +1,185 @@
+<div class="dashboard-container">
+  <div class="dashboard-header">
+    <h1>Good {{ timeOfDay }}, {{ userName }}</h1>
+    <div class="header-actions">
+      <p-button label="History" icon="pi pi-calendar" severity="secondary" (onClick)="openHistory()" />
+      <p-button label="Day Summary" icon="pi pi-chart-bar" severity="secondary" (onClick)="openSummary()" />
+      <p-button label="Add Entry" icon="pi pi-plus" (onClick)="openAddEntry()" />
+    </div>
+  </div>
+  <div class="cards">
+    <p-card>
+      <div class="card-content">
+        <div class="card-icon eaten"><i class="pi pi-gauge"></i></div>
+        <div class="card-body">
+          <span class="card-label">Calories Eaten</span>
+          <div class="value">{{ totalCalories }}</div>
+          <span class="card-unit">cals</span>
+        </div>
+      </div>
+    </p-card>
+    <p-card>
+      <div class="card-content">
+        <div class="card-icon" [ngClass]="calorieDiff < 0 ? 'over' : 'left'"><i class="pi" [ngClass]="calorieDiff < 0 ? 'pi-exclamation-triangle' : 'pi-sparkles'"></i></div>
+        <div class="card-body">
+          <span class="card-label">{{ calorieDiff < 0 ? 'Over Goal' : 'Calories Left' }}</span>
+          <div class="value" [ngClass]="{ 'negative': calorieDiff < 0 }">{{ calorieDiff | number }}</div>
+          <span class="card-unit">cals</span>
+        </div>
+      </div>
+    </p-card>
+    <p-card>
+      <div class="card-content">
+        <div class="card-icon goal"><i class="pi pi-bullseye"></i></div>
+        <div class="card-body">
+          <span class="card-label">Daily Goal</span>
+          <div class="value">{{ calorieGoal !== null ? (calorieGoal | number) : '—' }}</div>
+          <span class="card-unit">cals</span>
+        </div>
+      </div>
+    </p-card>
+    @if (proteinGoal !== null) {
+      <p-card>
+        <div class="card-content">
+          <div class="card-icon protein"><i class="pi pi-bolt"></i></div>
+          <div class="card-body">
+            <span class="card-label">Protein Eaten</span>
+            <div class="value">{{ totalProtein }}/{{ proteinGoal }}</div>
+            <span class="card-unit">grams</span>
+          </div>
+        </div>
+      </p-card>
+    }
+  </div>
+  <div class="meal-sections">
+    <p-card *ngFor="let type of mealTypes" [header]="mealTypeLabel(type)">
+      <div *ngIf="entriesFor(type).length === 0" class="empty-meal">
+        <i class="pi pi-inbox"></i>
+        <span>No entries yet</span>
+      </div>
+      <p-table *ngIf="entriesFor(type).length > 0" [value]="entriesFor(type)" responsiveLayout="scroll" [showGridlines]="false" styleClass="meal-table">
+        <ng-template pTemplate="body" let-entry>
+          <tr>
+            <td class="col-name">{{ entry.name }}</td>
+            <td class="col-cal">
+              <p-tag [value]="entry.calories + ' cals'" severity="info" [rounded]="true" />
+            </td>
+            <td class="col-macro">{{ entry.protein != null ? entry.protein + 'g' : '—' }} <span class="macro-label">protein</span></td>
+            <td class="col-macro">{{ entry.carbs != null ? entry.carbs + 'g' : '—' }} <span class="macro-label">carbs</span></td>
+            <td class="col-action">
+              <p-button icon="pi pi-times" [text]="true" severity="danger" size="small" pTooltip="Remove" tooltipPosition="left" (onClick)="deleteEntry(entry.id)" />
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="footer">
+          <tr class="meal-footer-row">
+            <td class="col-name"><strong>Total</strong></td>
+            <td class="col-cal" colspan="4">
+              <p-tag [value]="mealTypeCalories(type) + ' cals'" severity="success" [rounded]="true" />
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </p-card>
+  </div>
+</div>
+
+<!-- Today's summary dialog -->
+<p-dialog header="Day Summary" [(visible)]="showSummary" [modal]="true" [draggable]="false" [resizable]="false" [style]="{ width: '480px' }">
+  <div class="status-banner" [ngClass]="{ 'over': isOver, 'under': !isOver }">
+    <i class="pi" [ngClass]="isOver ? 'pi-exclamation-triangle' : 'pi-check-circle'"></i>
+    <span>{{ statusMessage }}</span>
+  </div>
+  <div class="summary-section">
+    <div class="stat-row">
+      <span class="stat-label">Calories Eaten</span>
+      <span class="stat-value">{{ totalCalories }} cal</span>
+    </div>
+    <div class="stat-row">
+      <span class="stat-label">Calorie Goal</span>
+      <span class="stat-value">{{ calorieGoal ?? '—' }} cal</span>
+    </div>
+    <div class="stat-row">
+      <span class="stat-label">{{ isOver ? 'Over by' : 'Remaining' }}</span>
+      <span class="stat-value" [ngClass]="{ 'text-red': isOver, 'text-green': !isOver }">{{ calorieDiff | number }} cal</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" [ngClass]="{ 'over': isOver }" [style.width.%]="progressPercent"></div>
+    </div>
+    <div class="progress-labels">
+      <span>0</span>
+      <span>{{ calorieGoal }} cal goal</span>
+    </div>
+  </div>
+  <p-divider />
+  <div class="summary-section">
+    <h4 class="summary-section-title">Today's Macros</h4>
+    @if (proteinGoal !== null) {
+      <div class="protein-goal-section">
+        <div class="stat-row">
+          <span class="stat-label">Carbs</span>
+          <span class="stat-value">{{ totalCarbs }}g</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">Protein Goal</span>
+          <span class="stat-value">{{ proteinGoal }}g</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">Protein Eaten</span>
+          <span class="stat-value">{{ totalProtein }}g</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill protein" [ngClass]="{ 'over': isProteinOver }" [style.width.%]="proteinProgressPercent"></div>
+        </div>
+        <div class="progress-labels">
+          <span>0</span>
+          <span>{{ proteinGoal }}g protein goal</span>
+        </div>
+      </div>
+      <p-divider />
+    }
+    <div class="empty-macros" *ngIf="foodLog.length === 0">
+      Nothing logged yet.
+    </div>
+  </div>
+  <ng-template pTemplate="footer">
+    <p-button label="Close" severity="secondary" [text]="true" (onClick)="showSummary = false" />
+  </ng-template>
+</p-dialog>
+
+<!-- Previous Days Summary Dialog -->
+<p-dialog header="Previous Days" [(visible)]="showHistory" [modal]="true" [draggable]="false" [resizable]="false" [style]="{ width: '700px' }">
+  <div *ngIf="historyLoading" class="history-loading">
+    <i class="pi pi-spin pi-spinner"></i>
+  </div>
+  <div *ngIf="!historyLoading && history.length === 0" class="history-empty">
+    <i class="pi pi-calendar"></i>
+    <span>No previous days logged yet.</span>
+  </div>
+  @if (!historyLoading && history.length > 0) {
+    <p-table [value]="history" [paginator]="true" [rows]="5" responsiveLayout="scroll">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Date</th>
+          <th>Calories</th>
+          <th>Protein</th>
+          <th>Carbs</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-day>
+        <tr>
+          <td class="col-date">{{ formatHistoryDate(day.date) }}</td>
+          <td><p-tag [value]="day.calories + ' cals'" severity="info" [rounded]="true" /></td>
+          <td class="col-macro">{{ day.protein }}g <span class="macro-label">protein</span></td>
+          <td class="col-macro">{{ day.carbs }}g <span class="macro-label">carbs</span></td>
+        </tr>
+      </ng-template>
+    </p-table>
+  }
+  <ng-template pTemplate="footer">
+    <p-button label="Close" severity="secondary" [text]="true" (onClick)="showHistory = false" />
+  </ng-template>
+</p-dialog>
+
+<!-- Add a new meal into entry dialog -->
+<app-add-meal-entry #addEntryDialog (entrySaved)="onEntrySaved()" />

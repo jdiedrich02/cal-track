@@ -1,0 +1,17 @@
+<p-toolbar>
+  <ng-template #start>
+    @if (authService.isAuthenticated) {
+      <button pButton class="mr-2" icon="pi pi-objects-column" text severity="secondary" pTooltip="Dashboard" tooltipPosition="bottom" (click)="navigate('/dashboard')"></button>
+      <button pButton class="mr-2" icon="pi pi-receipt" text severity="secondary" pTooltip="Macros" tooltipPosition="bottom" (click)="navigate('/macros')"></button>
+      <button pButton class="mr-2" icon="pi pi-cog" text severity="secondary" pTooltip="Setup" tooltipPosition="bottom" (click)="navigate('/setup')"></button>
+    }
+  </ng-template>
+  <ng-template #end>
+    @if (authService.isAuthenticated) {
+      <button pButton label="Logout" class="auth-button" (click)="logout()"></button>
+    } 
+    @else {
+      <button pButton label="Login" class="auth-button" (click)="navigate('/login')"></button>
+    }
+  </ng-template>
+</p-toolbar>

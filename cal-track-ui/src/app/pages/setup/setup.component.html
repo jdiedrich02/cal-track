@@ -1,0 +1,38 @@
+<div class="settings-container">
+  <p-card header="Calorie Tracking Settings">
+    <p class="settings-description">
+      Configure your daily nutrition targets. These values will be used to calculate
+      calories remaining and track your progress each day.
+    </p>
+    <form [formGroup]="settingsForm" (ngSubmit)="saveSettings()" class="settings-form">
+      <div class="field">
+        <label for="calorieGoal">Daily Calorie Goal</label>
+        <p-inputNumber id="calorieGoal" name="calorieGoal" formControlName="calorieGoal" [min]="1000" [max]="10000" [useGrouping]="false" suffix=" cal">
+        </p-inputNumber>
+        <small>Your target calories for the day.</small>
+      </div>
+      <div class="field">
+        <label for="proteinGoal">Protein Goal (Optional)</label>
+        <p-inputNumber id="proteinGoal" name="proteinGoal" formControlName="proteinGoal" [min]="0" [max]="500" [useGrouping]="false" suffix=" g">
+        </p-inputNumber>
+        <small>Useful for preserving muscle while dieting.</small>
+      </div>
+      <div class="field">
+        <label for="currentWeight">Current Weight (Optional)</label>
+        <p-inputNumber id="currentWeight" name="currentWeight" formControlName="currentWeight" [min]="0" [max]="1000" [step]="0.1" [useGrouping]="false" suffix=" lb">
+        </p-inputNumber>
+        <small>Helpful for monitoring progress over time.</small>
+      </div>
+      <div class="field">
+        <label for="goalType">Goal Type</label>
+        <p-dropdown id="goalType" name="goalType" [options]="goalTypes" formControlName="goalType" optionLabel="label" optionValue="value" placeholder="Select a goal">
+        </p-dropdown>
+        <small>Choose whether you're cutting, maintaining, or bulking.</small>
+      </div>
+      <div class="actions">
+        <button pButton type="submit" label="Save Settings" icon="pi pi-save" class="p-button-primary">
+        </button>
+      </div>
+    </form>
+  </p-card>
+</div>

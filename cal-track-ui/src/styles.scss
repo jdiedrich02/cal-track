@@ -1,0 +1,9 @@
+html, body {
+    font-family: 'Inter', sans-serif;
+}
+
+.required::after {
+    content: " *";
+    color: #e53935;
+    font-weight: 600;
+}
